@@ -15,10 +15,13 @@ app.get("/photos", async (req, res) => {
     const albumId = req.query.albumId
 
     const value = await client.get(`photos?albumId=${albumId}`)
-
+    
     if (value) {
+        const value = await client.get(`photos?albumId=${albumId}`)
+        console.log("cache hit");
         return res.json(JSON.parse(value))
     } else {
+        console.log("cache miss");
         const { data } = await axios.get(
             "https://jsonplaceholder.typicode.com/photos",
             { params: { albumId } }
