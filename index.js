@@ -19,10 +19,10 @@ app.get("/photos", async (req, res) => {
     const value = await client.get(`photos-${dataId}`)
     
     if (value) {
-        console.log(albumId + " cache hit");
+        console.log("cache tersedia, mengambil data dari redis");
         return res.json(JSON.parse(value))
     } else {
-        console.log(albumId + " cache miss");
+        console.log("cache TIDAK tersedia, mengambil data dari API dan menyimpan ke redis");
         const { data } = await axios.get(
             "https://jsonplaceholder.typicode.com/photos",
             { params: { albumId } }
