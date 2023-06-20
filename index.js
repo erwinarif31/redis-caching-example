@@ -15,21 +15,20 @@ app.get("/photos", async (req, res) => {
     const albumId = req.query.albumId
 
     // mengambil value dari cache
-    const value = await client.get(`photos?albumId=${albumId}`)
+    const value = await client.get(`photos-${albumId}`)
     
     if (value) {
-        const value = await client.get(`photos?albumId=${albumId}`)
-        console.log("cache hit");
+        console.log(albumId + " cache hit");
         return res.json(JSON.parse(value))
     } else {
-        console.log("cache miss");
+        console.log(albumId + " cache miss");
         const { data } = await axios.get(
             "https://jsonplaceholder.typicode.com/photos",
             { params: { albumId } }
         )
 
         // menyimpan value ke cache
-        client.set(`photos?albumId=${albumId}`, JSON.stringify(data), "EX", DEFAULT_EXPIRATION)
+        client.set(`photos-${albumId}`, JSON.stringify(data), "EX", DEFAULT_EXPIRATION)
         res.json(data)
     }
 })
