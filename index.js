@@ -14,8 +14,9 @@ app.use(cors())
 app.get("/photos", async (req, res) => {
     const albumId = req.query.albumId
 
+    const dataId = albumId ? albumId : "all"
     // mengambil value dari cache
-    const value = await client.get(`photos-${albumId}`)
+    const value = await client.get(`photos-${dataId}`)
     
     if (value) {
         console.log(albumId + " cache hit");
@@ -28,7 +29,7 @@ app.get("/photos", async (req, res) => {
         )
 
         // menyimpan value ke cache
-        client.set(`photos-${albumId}`, JSON.stringify(data), "EX", DEFAULT_EXPIRATION)
+        client.set(`photos-${dataId}`, JSON.stringify(data), "EX", DEFAULT_EXPIRATION)
         res.json(data)
     }
 })
